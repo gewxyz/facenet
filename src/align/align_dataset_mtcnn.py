@@ -112,7 +112,8 @@ def main(args):
                                     det_arr.append(det[index,:])
                             else:
                                 det_arr.append(np.squeeze(det))
-
+                            if args.detect_multiple_faces:
+                                img_mask=img.copy()
                             for i, det in enumerate(det_arr):
                                 det = np.squeeze(det)
                                 bb = np.zeros(4, dtype=np.int32)
@@ -127,8 +128,9 @@ def main(args):
                                 output_filename_n = "{}_{}{}".format(filename_base, i, file_extension)
                                 misc.imsave(output_filename_n, scaled)
                                 text_file.write('%s %d %d %d %d\n' % (output_filename_n, bb[0], bb[1], bb[2], bb[3]))
-                                cv2.rectangle(img, (int(det[0]), int(det[1])), (int(det[2]), int(det[3])), (0, 255, 0),
-                                              1)  
+                                if arg.detect_multiple_faces:
+                                    cv2.rectangle(img, (int(det[0]), int(det[1])), (int(det[2]), int(det[3])), (0, 255, 0),
+                                                  1)  
                             if args.detect_multiple_faces:
                                 misc.imsave(output_filename, img) 
                         else:
